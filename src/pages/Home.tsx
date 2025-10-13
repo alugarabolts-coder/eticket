@@ -66,31 +66,33 @@ export function Home() {
   const totalPassengers = formData.adults + formData.children + formData.infants;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">
+    <div className="min-h-screen">
       <div
-        className="relative h-[500px] bg-cover bg-center"
+        className="relative min-h-screen md:h-auto bg-cover bg-center md:bg-gradient-to-br md:from-teal-500 md:to-cyan-600"
         style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=compress&fit=crop&w=1200&q=80)', // gambar kapal penumpang
+          backgroundImage: 'url(https://images.pexels.com/photos/3566187/pexels-photo-3566187.jpeg?auto=compress&cs=tinysrgb&w=1200)',
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 to-blue-700/10"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-teal-600/60 to-cyan-700/80 md:from-transparent md:to-transparent"></div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Pesan Tiket Kapal Dengan Mudah
-          </h1>
-          <p className="text-xl text-blue-100 mb-8">
-            Jelajahi Indonesia dengan perjalanan laut yang nyaman dan aman
-          </p>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen md:h-full flex flex-col justify-center py-8 md:py-16">
+          <div className="text-center mb-8 md:mb-12">
+            <div className="w-32 h-32 mx-auto mb-6 bg-white rounded-full flex items-center justify-center shadow-xl">
+              <img
+                src="https://images.pexels.com/photos/1285625/pexels-photo-1285625.jpeg?auto=compress&cs=tinysrgb&w=400"
+                alt="Ship"
+                className="w-28 h-28 rounded-full object-cover"
+              />
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
+              Pesan Tiket Kapal Anda
+            </h1>
+            <p className="text-base md:text-lg text-white/90 max-w-md mx-auto">
+              Temukan rute terbaik untuk perjalanan Anda
+            </p>
+          </div>
 
-          <div className="bg-white rounded-2xl shadow-2xl p-6 md:p-8 relative overflow-hidden">
-            {/* Vessel background illustration */}
-            <img
-              src="https://cdn.pixabay.com/photo/2013/07/13/12/46/ship-160971_1280.png"
-              alt="Vessel"
-              className="absolute right-0 bottom-0 w-48 opacity-10 pointer-events-none select-none"
-              style={{ zIndex: 0 }}
-            />
+          <div className="bg-white rounded-3xl shadow-2xl p-6 md:p-8 relative overflow-hidden max-w-2xl mx-auto w-full">
             <div className="relative z-10">
               <div className="flex items-center space-x-4 mb-6">
                 <label className="flex items-center space-x-2 cursor-pointer">
@@ -98,23 +100,23 @@ export function Home() {
                     type="radio"
                     checked={!isRoundTrip}
                     onChange={() => setIsRoundTrip(false)}
-                    className="w-4 h-4 text-blue-600"
+                    className="w-4 h-4 text-teal-600"
                   />
-                  <span className="text-gray-700 font-medium">Sekali Jalan</span>
+                  <span className="text-gray-800 font-medium">Sekali Jalan</span>
                 </label>
                 <label className="flex items-center space-x-2 cursor-pointer">
                   <input
                     type="radio"
                     checked={isRoundTrip}
                     onChange={() => setIsRoundTrip(true)}
-                    className="w-4 h-4 text-blue-600"
+                    className="w-4 h-4 text-teal-600"
                   />
-                  <span className="text-gray-700 font-medium">Pulang Pergi</span>
+                  <span className="text-gray-800 font-medium">Pulang Pergi</span>
                 </label>
               </div>
 
               <form onSubmit={handleSearch}>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                <div className="space-y-4 mb-6">
                   <div className="relative">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Dari
@@ -122,7 +124,7 @@ export function Home() {
                     <select
                       value={formData.departurePort}
                       onChange={(e) => setFormData({ ...formData, departurePort: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
                       required
                     >
                       <option value="">Pilih pelabuhan</option>
@@ -142,7 +144,7 @@ export function Home() {
                       <select
                         value={formData.arrivalPort}
                         onChange={(e) => setFormData({ ...formData, arrivalPort: e.target.value })}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
                         required
                       >
                         <option value="">Pilih pelabuhan</option>
@@ -155,11 +157,10 @@ export function Home() {
                       <button
                         type="button"
                         onClick={swapPorts}
-                        className="ml-2 bg-blue-600 p-2 rounded-full hover:bg-blue-700 transition-colors self-center"
-                        style={{ height: '44px' }}
+                        className="ml-2 bg-teal-600 p-3 rounded-full hover:bg-teal-700 transition-colors self-center"
                         aria-label="Reverse"
                       >
-                        <ArrowRightLeft className="w-4 h-4 text-white" />
+                        <ArrowRightLeft className="w-5 h-5 text-white" />
                       </button>
                     </div>
                   </div>
@@ -173,7 +174,7 @@ export function Home() {
                       value={formData.departureDate}
                       onChange={(e) => setFormData({ ...formData, departureDate: e.target.value })}
                       min={new Date().toISOString().split('T')[0]}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
                       required
                     />
                   </div>
@@ -188,7 +189,7 @@ export function Home() {
                         value={formData.returnDate}
                         onChange={(e) => setFormData({ ...formData, returnDate: e.target.value })}
                         min={formData.departureDate || new Date().toISOString().split('T')[0]}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
                         required={isRoundTrip}
                       />
                     </div>
@@ -306,14 +307,10 @@ export function Home() {
                 <Button
                   type="submit"
                   size="lg"
-                  className="w-full md:w-auto bg-blue-700 hover:bg-blue-900 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2"
-                  style={{
-                    backgroundImage: 'linear-gradient(90deg, #2563eb 0%, #1e3a8a 100%)',
-                    border: 'none',
-                  }}
+                  className="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-4 px-6 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2"
                 >
-                  <Search className="w-5 h-5 mr-2" />
-                  Cari Tiket
+                  <Search className="w-5 h-5" />
+                  Cari
                 </Button>
               </form>
             </div>
@@ -321,43 +318,6 @@ export function Home() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-          Rute Populer
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {ports.slice(0, 6).map((port, idx) => (
-            <div
-              key={port.id}
-              className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-6 cursor-pointer border border-gray-100"
-            >
-              <h3 className="font-semibold text-lg text-gray-900 mb-2">
-                {port.city}
-              </h3>
-              <p className="text-sm text-gray-600">{port.name}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="bg-blue-600 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-white text-center">
-            <div>
-              <div className="text-4xl font-bold mb-2">50+</div>
-              <div className="text-blue-100">Rute Tersedia</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold mb-2">10+</div>
-              <div className="text-blue-100">Operator Kapal</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold mb-2">100K+</div>
-              <div className="text-blue-100">Penumpang Puas</div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

@@ -7,14 +7,14 @@ export function Header() {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-50">
+    <header className="bg-gradient-to-r from-teal-500 to-cyan-600 shadow-lg sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center space-x-2">
-            <div className="bg-blue-600 p-2 rounded-lg">
-              <Ship className="w-6 h-6 text-white" />
+            <div className="bg-white p-2 rounded-lg">
+              <Ship className="w-6 h-6 text-teal-600" />
             </div>
-            <span className="text-xl font-bold text-gray-900">ShipTix</span>
+            <span className="text-xl font-bold text-white">ShipTix</span>
           </Link>
 
           <nav className="hidden md:flex space-x-8">
@@ -22,8 +22,8 @@ export function Header() {
               to="/"
               className={`flex items-center space-x-1 px-3 py-2 rounded-lg transition-colors ${
                 isActive('/')
-                  ? 'text-blue-600 bg-blue-50'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  ? 'text-white bg-white/20'
+                  : 'text-white/80 hover:text-white hover:bg-white/10'
               }`}
             >
               <Ship className="w-4 h-4" />
@@ -33,8 +33,8 @@ export function Header() {
               to="/bookings"
               className={`flex items-center space-x-1 px-3 py-2 rounded-lg transition-colors ${
                 isActive('/bookings')
-                  ? 'text-blue-600 bg-blue-50'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  ? 'text-white bg-white/20'
+                  : 'text-white/80 hover:text-white hover:bg-white/10'
               }`}
             >
               <Calendar className="w-4 h-4" />
@@ -44,8 +44,8 @@ export function Header() {
               to="/help"
               className={`flex items-center space-x-1 px-3 py-2 rounded-lg transition-colors ${
                 isActive('/help')
-                  ? 'text-blue-600 bg-blue-50'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  ? 'text-white bg-white/20'
+                  : 'text-white/80 hover:text-white hover:bg-white/10'
               }`}
             >
               <HelpCircle className="w-4 h-4" />

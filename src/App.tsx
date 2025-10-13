@@ -15,7 +15,7 @@ function App() {
   return (
     <BrowserRouter>
       <BookingProvider>
-        <div className="min-h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col bg-gradient-to-br from-cyan-50 to-teal-50">
           <Header />
           <main className="flex-grow">
             <Routes>

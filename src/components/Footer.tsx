@@ -8,7 +8,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <div className="bg-blue-600 p-2 rounded-lg">
+              <div className="bg-teal-600 p-2 rounded-lg">
                 <Ship className="w-5 h-5 text-white" />
               </div>
               <span className="text-xl font-bold text-white">ShipTix</span>
