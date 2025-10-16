@@ -10,6 +10,7 @@ import { Payment } from './pages/Payment';
 import { Ticket } from './pages/Ticket';
 import { MyBookings } from './pages/MyBookings';
 import { Help } from './pages/Help';
+import { ExportData } from './pages/ExportData';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
               <Route path="/ticket/:bookingCode" element={<Ticket />} />
               <Route path="/bookings" element={<MyBookings />} />
               <Route path="/help" element={<Help />} />
+              <Route path="/export" element={<ExportData />} />
             </Routes>
           </main>
           <Footer />

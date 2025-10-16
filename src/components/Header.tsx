@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Ship, Calendar, HelpCircle } from 'lucide-react';
+import { Ship, Calendar, HelpCircle, Download } from 'lucide-react';
 
 export function Header() {
   const location = useLocation();
@@ -50,6 +50,17 @@ export function Header() {
             >
               <HelpCircle className="w-4 h-4" />
               <span>Bantuan</span>
+            </Link>
+            <Link
+              to="/export"
+              className={`flex items-center space-x-1 px-3 py-2 rounded-lg transition-colors ${
+                isActive('/export')
+                  ? 'text-white bg-white/20'
+                  : 'text-white/80 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              <Download className="w-4 h-4" />
+              <span>Export</span>
             </Link>
           </nav>
         </div>
