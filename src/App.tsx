@@ -10,7 +10,11 @@ import { Payment } from './pages/Payment';
 import { Ticket } from './pages/Ticket';
 import { MyBookings } from './pages/MyBookings';
 import { Help } from './pages/Help';
+<<<<<<< HEAD
 import Login from './pages/Login';
+=======
+import { ExportData } from './pages/ExportData';
+>>>>>>> baaa1fc9ee959d9886f12b167e1657e08f03c57d
 
 function App() {
   return (
@@ -30,6 +34,7 @@ function App() {
               <Route path="/ticket/:bookingCode" element={<Ticket />} />
               <Route path="/bookings" element={<MyBookings />} />
               <Route path="/help" element={<Help />} />
+              <Route path="/export" element={<ExportData />} />
             </Routes>
           </main>
           <Footer />
