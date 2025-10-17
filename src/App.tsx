@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { BookingProvider } from './context/BookingContext';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
@@ -10,6 +10,7 @@ import { Payment } from './pages/Payment';
 import { Ticket } from './pages/Ticket';
 import { MyBookings } from './pages/MyBookings';
 import { Help } from './pages/Help';
+import Login from './pages/Login';
 
 function App() {
   return (
@@ -19,7 +20,9 @@ function App() {
           <Header />
           <main className="flex-grow">
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<Navigate to="/login" replace />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/home" element={<Home />} />
               <Route path="/search" element={<SearchResults />} />
               <Route path="/ship-detail" element={<ShipDetail />} />
               <Route path="/passenger-data" element={<PassengerData />} />

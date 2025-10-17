@@ -4,6 +4,7 @@ import { Search, ArrowRightLeft, Users, Calendar as CalendarIcon } from 'lucide-
 import { Button } from '../components/Button';
 import { supabase, Port } from '../lib/supabase';
 import { useBooking } from '../context/BookingContext';
+import bgImage from '../assets/bg.jpg';
 
 export function Home() {
   const navigate = useNavigate();
@@ -70,7 +71,7 @@ export function Home() {
       <div
         className="relative min-h-screen md:h-auto bg-cover bg-center md:bg-gradient-to-br md:from-teal-500 md:to-cyan-600"
         style={{
-          backgroundImage: 'url(https://images.pexels.com/photos/3566187/pexels-photo-3566187.jpeg?auto=compress&cs=tinysrgb&w=1200)',
+          backgroundImage: `url(${bgImage})`,
         }}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-teal-600/60 to-cyan-700/80 md:from-transparent md:to-transparent"></div>
@@ -79,7 +80,7 @@ export function Home() {
           <div className="text-center mb-8 md:mb-12">
             <div className="w-32 h-32 mx-auto mb-6 bg-white rounded-full flex items-center justify-center shadow-xl">
               <img
-                src="https://images.pexels.com/photos/1285625/pexels-photo-1285625.jpeg?auto=compress&cs=tinysrgb&w=400"
+                src="https://assets.pikiran-rakyat.com/crop/0x0:0x0/720x0/webp/photo/2024/05/16/1385996479.jpg"
                 alt="Ship"
                 className="w-28 h-28 rounded-full object-cover"
               />

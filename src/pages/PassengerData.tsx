@@ -29,7 +29,7 @@ export function PassengerData() {
 
   useEffect(() => {
     if (!selectedSchedule || !searchParams || !selectedClass || selectedSeats.length === 0) {
-      navigate('/');
+      navigate('/home');
       return;
     }
 

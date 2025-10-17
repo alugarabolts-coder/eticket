@@ -15,7 +15,7 @@ export function ShipDetail() {
 
   useEffect(() => {
     if (!selectedSchedule || !searchParams) {
-      navigate('/');
+      navigate('/home');
     }
   }, [selectedSchedule, searchParams]);
 

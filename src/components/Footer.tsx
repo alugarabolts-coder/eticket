@@ -66,15 +66,19 @@ export function Footer() {
               <ul className="space-y-2 text-sm">
                 <li className="flex items-center space-x-2">
                   <Phone className="w-4 h-4" />
-                  <span>021-12345678</span>
+                  <span>+62 851 8202 2026</span>
                 </li>
                 <li className="flex items-center space-x-2">
                   <Mail className="w-4 h-4" />
-                  <span>support@shiptix.com</span>
+                  <span>hey@alugara.id</span>
                 </li>
-                <li className="flex items-center space-x-2">
-                  <MapPin className="w-4 h-4" />
-                  <span>Jakarta, Indonesia</span>
+                <li className="flex items-start space-x-2">
+                  <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                  <span className="leading-snug">
+                    Jl. Taman Pasadena Blok C4 No 6,<br />
+                    Puri Surya Jaya, Sidoarjo,<br />
+                    Jawa Timur 61254, Indonesia
+                  </span>
                 </li>
               </ul>
             </div>

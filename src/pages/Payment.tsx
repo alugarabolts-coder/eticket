@@ -5,6 +5,11 @@ import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import { useBooking } from '../context/BookingContext';
 import { supabase } from '../lib/supabase';
+import bcaLogo from '../assets/bca.png';
+import mandiriLogo from '../assets/mandiri.png';
+import bniLogo from '../assets/bni.png';
+import gopayLogo from '../assets/gopay.jpeg';
+import ovoLogo from '../assets/ovo.jpg';
 
 export function Payment() {
   const navigate = useNavigate();
@@ -30,7 +35,7 @@ export function Payment() {
       passengers.length === 0 ||
       !contactInfo
     ) {
-      navigate('/');
+      navigate('/home');
     }
   }, []);
 
@@ -137,56 +142,32 @@ export function Payment() {
     {
       id: 'bca_va',
       name: 'BCA Virtual Account',
-      icon: Building2,
+      icon: bcaLogo,
       description: 'Transfer ke Virtual Account BCA',
     },
     {
       id: 'mandiri_va',
       name: 'Mandiri Virtual Account',
-      icon: Building2,
+      icon: mandiriLogo,
       description: 'Transfer ke Virtual Account Mandiri',
     },
     {
       id: 'bni_va',
       name: 'BNI Virtual Account',
-      icon: Building2,
+      icon: bniLogo,
       description: 'Transfer ke Virtual Account BNI',
     },
     {
       id: 'gopay',
       name: 'GoPay',
-      icon: Smartphone,
+      icon: gopayLogo,
       description: 'Bayar dengan GoPay',
     },
     {
       id: 'ovo',
       name: 'OVO',
-      icon: Smartphone,
+      icon: ovoLogo,
       description: 'Bayar dengan OVO',
-    },
-    {
-      id: 'dana',
-      name: 'DANA',
-      icon: Smartphone,
-      description: 'Bayar dengan DANA',
-    },
-    {
-      id: 'qris',
-      name: 'QRIS',
-      icon: QrCode,
-      description: 'Scan QR untuk membayar',
-    },
-    {
-      id: 'alfamart',
-      name: 'Alfamart',
-      icon: Store,
-      description: 'Bayar di Alfamart terdekat',
-    },
-    {
-      id: 'indomaret',
-      name: 'Indomaret',
-      icon: Store,
-      description: 'Bayar di Indomaret terdekat',
     },
   ];
 

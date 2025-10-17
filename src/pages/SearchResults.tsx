@@ -17,7 +17,7 @@ export function SearchResults() {
 
   useEffect(() => {
     if (!searchParams) {
-      navigate('/');
+      navigate('/home');
       return;
     }
     loadSchedules();
@@ -228,7 +228,7 @@ export function SearchResults() {
                 <p className="text-gray-600 mb-4">
                   Maaf, tidak ada jadwal kapal untuk rute dan tanggal yang Anda pilih.
                 </p>
-                <Button onClick={() => navigate('/')}>Cari Rute Lain</Button>
+                <Button onClick={() => navigate('/home')}>Cari Rute Lain</Button>
               </Card>
             ) : (
               <div className="space-y-4">
