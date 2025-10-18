@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+{/* <<<<<<< HEAD */}
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Ship, Calendar, HelpCircle, UserCircle, LogOut, User } from 'lucide-react';
@@ -9,10 +9,10 @@ interface UserData {
   name: string;
   email: string;
 }
-=======
+{/* ======= */}
 import { Link, useLocation } from 'react-router-dom';
 import { Ship, Calendar, HelpCircle, Download } from 'lucide-react';
->>>>>>> baaa1fc9ee959d9886f12b167e1657e08f03c57d
+{/* >>>>>>> baaa1fc9ee959d9886f12b167e1657e08f03c57d */}
 
 export function Header() {
   const location = useLocation();
@@ -69,7 +69,7 @@ export function Header() {
             <span className="text-xl font-bold text-white">ShipTix</span>
           </Link>
 
-<<<<<<< HEAD
+{/* <<<<<<< HEAD */}
           <div className="flex items-center space-x-8">
             <nav className="hidden md:flex space-x-8">
               <Link
@@ -154,7 +154,7 @@ export function Header() {
               )}
             </div>
           </div>
-=======
+{/* ======= */}
           <nav className="hidden md:flex space-x-8">
             <Link
               to="/"
@@ -201,7 +201,7 @@ export function Header() {
               <span>Export</span>
             </Link>
           </nav>
->>>>>>> baaa1fc9ee959d9886f12b167e1657e08f03c57d
+{/* >>>>>>> baaa1fc9ee959d9886f12b167e1657e08f03c57d */}
         </div>
       </div>
     </header>
