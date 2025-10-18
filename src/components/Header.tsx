@@ -1,7 +1,7 @@
 {/* <<<<<<< HEAD */}
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Ship, Calendar, HelpCircle, UserCircle, LogOut, User } from 'lucide-react';
+import { Ship, Calendar, HelpCircle, UserCircle, LogOut, User, Download } from 'lucide-react';
 
 // Tipe data untuk user, agar lebih aman
 interface UserData {
@@ -11,7 +11,7 @@ interface UserData {
 }
 {/* ======= */}
 {/* import { Link, useLocation } from 'react-router-dom'; */}
-import { Ship, Calendar, HelpCircle, Download } from 'lucide-react';{/* */}
+{/* import { Ship, Calendar, HelpCircle, Download } from 'lucide-react'; */}
 {/* >>>>>>> baaa1fc9ee959d9886f12b167e1657e08f03c57d */}
 
 export function Header() {
