@@ -1,11 +1,7 @@
-// src/pages/Login.tsx
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, LogIn } from 'lucide-react';
 
-// Data dummy pengguna berdasarkan file bookings.csv
-// Password disamakan dengan email untuk kemudahan demo
 const dummyUsers = [
   { id: 1, name: 'Budi Santoso', email: 'budi.santoso@email.com', password: '123' },
   { id: 2, name: 'Siti Nurhaliza', email: 'siti.nur@email.com', password: '123' },
@@ -37,7 +33,6 @@ export default function Login() {
 
     setLoading(true);
     setTimeout(() => {
-      // Cari pengguna di dalam array dummyUsers
       const foundUser = dummyUsers.find(
         (user) => user.email === email && user.password === password
       );
@@ -55,7 +50,7 @@ export default function Login() {
         }
         
         console.log('Login berhasil!', userToStore);
-        navigate('/home'); // Arahkan ke halaman pesanan saya
+        navigate('/home');
 
       } else {
         setError('Email atau password yang Anda masukkan salah.');
