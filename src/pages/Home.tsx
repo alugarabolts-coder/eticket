@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { Search, ArrowRightLeft, Users, Ship, CalendarDays, Car } from 'lucide-react';
 import { Button } from '../components/Button';
 import { useBooking } from '../context/BookingContext';
-import { supabase } from '../lib/supabase';
 import bgImage from '../assets/bg.jpg';
+
+const PORTS_KEY = 'masterPortsData';
 
 interface Port {
   id: string;
   name: string;
   city: string;
-  code?: string;
 }
 
 type PassengerCounterProps = { value: number; onIncrement: () => void; onDecrement: () => void; onChange: (newValue: number) => void; };
@@ -42,25 +42,11 @@ export function Home() {
   });
 
   useEffect(() => {
-    const fetchPorts = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('ports')
-          .select('id, name, city, code')
-          .order('city');
-
-        if (error) {
-          console.error('Error fetching ports:', error);
-        } else if (data) {
-          setPorts(data);
-        }
-      } catch (err) {
-        console.error('Error loading ports:', err);
-      }
-    };
-
-    fetchPorts();
-
+    const savedPorts = localStorage.getItem(PORTS_KEY);
+    if (savedPorts) {
+      setPorts(JSON.parse(savedPorts));
+    }
+    
     const today = new Date().toISOString().split('T')[0];
     setFormData(f => ({ ...f, departureDate: today }));
   }, []);
@@ -153,17 +139,17 @@ export function Home() {
                   
                   <div className="bg-white rounded-xl shadow-md border border-gray-200">
                     <div className="flex items-center justify-between p-4">
-                      <div onClick={() => departureDateRef.current?.showPicker()} className="flex items-center gap-4 cursor-pointer flex-1">
+                      <div className="flex items-center gap-4 cursor-pointer" onClick={() => departureDateRef.current?.showPicker()}>
                         <CalendarDays className="w-6 h-6 text-gray-400" />
-                        <div><span className="text-xs text-gray-500 block">Tanggal Berangkat</span><p className="text-base font-semibold text-gray-800">{formatDate(formData.departureDate)}</p></div>
+                        <div><label className="text-xs text-gray-500">Tanggal Berangkat</label><p className="text-base font-semibold text-gray-800">{formatDate(formData.departureDate)}</p></div>
                       </div>
-                      <input ref={departureDateRef} id="departure-date" type="date" value={formData.departureDate} onChange={(e) => setFormData({ ...formData, departureDate: e.target.value, returnDate: '' })} min={new Date().toISOString().split('T')[0]} className="opacity-0 w-0 h-0 absolute" required />
+                      <input ref={departureDateRef} type="date" value={formData.departureDate} onChange={(e) => setFormData({ ...formData, departureDate: e.target.value, returnDate: '' })} min={new Date().toISOString().split('T')[0]} className="sr-only" required />
                       <div className="flex items-center gap-3">
                         <span className="text-sm font-medium text-gray-700">Pulang Pergi</span>
                         <label htmlFor="round-trip-toggle" className="relative inline-flex items-center cursor-pointer"><input type="checkbox" id="round-trip-toggle" className="sr-only peer" checked={isRoundTrip} onChange={() => setIsRoundTrip(!isRoundTrip)} /><div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div></label>
                       </div>
                     </div>
-                    {isRoundTrip && (<><hr className="border-gray-200 mx-4" /><div onClick={() => returnDateRef.current?.showPicker()} className="flex items-center gap-4 p-4 cursor-pointer"><CalendarDays className="w-6 h-6 text-gray-400" /><div><span className="text-xs text-gray-500 block">Tanggal Pulang</span><p className="text-base font-semibold text-gray-800">{formatDate(formData.returnDate)}</p></div></div><input ref={returnDateRef} id="return-date" type="date" value={formData.returnDate} onChange={(e) => setFormData({ ...formData, returnDate: e.target.value })} min={formData.departureDate || new Date().toISOString().split('T')[0]} className="opacity-0 w-0 h-0 absolute" required={isRoundTrip} /></>)}
+                    {isRoundTrip && (<><hr className="border-gray-200 mx-4" /><div className="flex items-center gap-4 p-4 cursor-pointer" onClick={() => returnDateRef.current?.showPicker()}><CalendarDays className="w-6 h-6 text-gray-400" /><div><label className="text-xs text-gray-500">Tanggal Pulang</label><p className="text-base font-semibold text-gray-800">{formatDate(formData.returnDate)}</p></div></div><input ref={returnDateRef} type="date" value={formData.returnDate} onChange={(e) => setFormData({ ...formData, returnDate: e.target.value })} min={formData.departureDate || new Date().toISOString().split('T')[0]} className="sr-only" required={isRoundTrip} /></>)}
                   </div>
                   <div className="border border-gray-200 rounded-xl p-4 shadow-md">
                     <div className="relative">
