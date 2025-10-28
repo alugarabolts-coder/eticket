@@ -153,11 +153,17 @@ export function Home() {
                   
                   <div className="bg-white rounded-xl shadow-md border border-gray-200">
                     <div className="flex items-center justify-between p-4">
-                      <label htmlFor="departure-date" className="flex items-center gap-4 cursor-pointer flex-1">
-                        <CalendarDays className="w-6 h-6 text-gray-400" />
-                        <div><span className="text-xs text-gray-500 block">Tanggal Berangkat</span><p className="text-base font-semibold text-gray-800">{formatDate(formData.departureDate)}</p></div>
-                      </label>
-                      <input ref={departureDateRef} id="departure-date" type="date" value={formData.departureDate} onChange={(e) => setFormData({ ...formData, departureDate: e.target.value, returnDate: '' })} min={new Date().toISOString().split('T')[0]} className="opacity-0 w-0 h-0 absolute" required />
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Tanggal Berangkat
+                    </label>
+                    <input
+                      type="date"
+                      value={formData.departureDate}
+                      onChange={(e) => setFormData({ ...formData, departureDate: e.target.value })}
+                      min={new Date().toISOString().split('T')[0]}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      required
+                    />
                       <div className="flex items-center gap-3">
                         <span className="text-sm font-medium text-gray-700">Pulang Pergi</span>
                         <label htmlFor="round-trip-toggle" className="relative inline-flex items-center cursor-pointer"><input type="checkbox" id="round-trip-toggle" className="sr-only peer" checked={isRoundTrip} onChange={() => setIsRoundTrip(!isRoundTrip)} /><div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div></label>
