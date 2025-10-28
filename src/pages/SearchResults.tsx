@@ -122,7 +122,7 @@ export function SearchResults() {
                 <Ship className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">Tidak Ada Jadwal Tersedia</h3>
                 <p className="text-gray-600 mb-4">Maaf, tidak ada jadwal untuk rute dan tanggal yang Anda pilih.</p>
-                <Button onClick={() => navigate('/')}>Cari Rute Lain</Button>
+                <Button onClick={() => navigate('/home')}>Cari Rute Lain</Button>
               </Card>
             ) : (
               <div className="space-y-6">
