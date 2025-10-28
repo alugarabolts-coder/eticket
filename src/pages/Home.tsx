@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { Search, ArrowRightLeft, Users, Ship, CalendarDays, Car } from 'lucide-react';
 import { Button } from '../components/Button';
 import { useBooking } from '../context/BookingContext';
+import { supabase } from '../lib/supabase';
 import bgImage from '../assets/bg.jpg';
-
-const PORTS_KEY = 'masterPortsData';
 
 interface Port {
   id: string;
   name: string;
   city: string;
+  code?: string;
 }
 
 type PassengerCounterProps = { value: number; onIncrement: () => void; onDecrement: () => void; onChange: (newValue: number) => void; };
@@ -42,11 +42,25 @@ export function Home() {
   });
 
   useEffect(() => {
-    const savedPorts = localStorage.getItem(PORTS_KEY);
-    if (savedPorts) {
-      setPorts(JSON.parse(savedPorts));
-    }
-    
+    const fetchPorts = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('ports')
+          .select('id, name, city, code')
+          .order('city');
+
+        if (error) {
+          console.error('Error fetching ports:', error);
+        } else if (data) {
+          setPorts(data);
+        }
+      } catch (err) {
+        console.error('Error loading ports:', err);
+      }
+    };
+
+    fetchPorts();
+
     const today = new Date().toISOString().split('T')[0];
     setFormData(f => ({ ...f, departureDate: today }));
   }, []);
