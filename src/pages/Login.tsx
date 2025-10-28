@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, LogIn } from 'lucide-react';
 import bgImage from '../assets/bg.jpg';
+import { GoogleLogin, CredentialResponse } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode';
 
 const dummyUsers = [
   { id: '3112b676-1700-400c-9650-842bd7f9cea5', name: 'Aryo Santoso', email: 'aryo.santoso@email.com', password: '123' },
@@ -11,6 +13,13 @@ const dummyUsers = [
   { id: '5', name: 'jono', email: 'jono@jono', password: '123' },
   { id: '6', name: 'Admin', email: 'admin', password: 'admin' }
 ];
+
+interface GoogleUserProfile {
+  sub: string;
+  name: string;
+  email: string;
+  picture: string;
+}
 
 export default function Login() {
   const navigate = useNavigate();
@@ -64,6 +73,36 @@ export default function Login() {
     }, 1500);
   };
 
+  const handleGoogleSuccess = (credentialResponse: CredentialResponse) => {
+    if (credentialResponse.credential) {
+      const userProfile: GoogleUserProfile = jwtDecode(credentialResponse.credential);
+      console.log('Login Google berhasil:', userProfile);
+
+      const userToStore = {
+        id: userProfile.sub,
+        name: userProfile.name,
+        email: userProfile.email,
+      };
+
+      const googleAuthToken = credentialResponse.credential;
+      if (remember) {
+        localStorage.setItem('auth_token', googleAuthToken);
+        localStorage.setItem('user', JSON.stringify(userToStore));
+      } else {
+        sessionStorage.setItem('auth_token', googleAuthToken);
+        sessionStorage.setItem('user', JSON.stringify(userToStore));
+      }
+
+      navigate('/home');
+    } else {
+      handleGoogleError();
+    }
+  };
+
+  const handleGoogleError = () => {
+    setError('Login dengan Google gagal. Silakan coba lagi.');
+    console.error('Login Gagal');
+  };
 
   return (
     <div
@@ -157,6 +196,23 @@ export default function Login() {
           </button>
         </form>
         
+        <div className="flex items-center my-6">
+          <div className="flex-grow border-t border-gray-300"></div>
+          <span className="mx-4 text-gray-500 text-sm">atau</span>
+          <div className="flex-grow border-t border-gray-300"></div>
+        </div>
+
+        <div className="flex justify-center">
+            <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={handleGoogleError}
+                useOneTap
+                width="300px"
+                theme="outline"
+                shape="rectangular"
+            />
+        </div>
+
         <div className="mt-8 text-center text-sm">
           <span className="text-gray-600">Belum punya akun? </span>
           <Link to="/register" className="text-teal-600 hover:underline font-medium">
