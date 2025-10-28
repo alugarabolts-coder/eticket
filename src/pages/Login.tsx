@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, LogIn } from 'lucide-react';
 import bgImage from '../assets/bg.jpg';
+import { GoogleLogin, CredentialResponse } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
 
 const dummyUsers = [
@@ -72,31 +73,31 @@ export default function Login() {
     }, 1500);
   };
 
-  // const handleGoogleSuccess = (credentialResponse: CredentialResponse) => {
-  //   if (credentialResponse.credential) {
-  //     const userProfile: GoogleUserProfile = jwtDecode(credentialResponse.credential);
-  //     console.log('Login Google berhasil:', userProfile);
+  const handleGoogleSuccess = (credentialResponse: CredentialResponse) => {
+    if (credentialResponse.credential) {
+      const userProfile: GoogleUserProfile = jwtDecode(credentialResponse.credential);
+      console.log('Login Google berhasil:', userProfile);
 
-  //     const userToStore = {
-  //       id: userProfile.sub,
-  //       name: userProfile.name,
-  //       email: userProfile.email,
-  //     };
+      const userToStore = {
+        id: userProfile.sub,
+        name: userProfile.name,
+        email: userProfile.email,
+      };
 
-  //     const googleAuthToken = credentialResponse.credential;
-  //     if (remember) {
-  //       localStorage.setItem('auth_token', googleAuthToken);
-  //       localStorage.setItem('user', JSON.stringify(userToStore));
-  //     } else {
-  //       sessionStorage.setItem('auth_token', googleAuthToken);
-  //       sessionStorage.setItem('user', JSON.stringify(userToStore));
-  //     }
+      const googleAuthToken = credentialResponse.credential;
+      if (remember) {
+        localStorage.setItem('auth_token', googleAuthToken);
+        localStorage.setItem('user', JSON.stringify(userToStore));
+      } else {
+        sessionStorage.setItem('auth_token', googleAuthToken);
+        sessionStorage.setItem('user', JSON.stringify(userToStore));
+      }
 
-  //     navigate('/home');
-  //   } else {
-  //     handleGoogleError();
-  //   }
-  // };
+      navigate('/home');
+    } else {
+      handleGoogleError();
+    }
+  };
 
   const handleGoogleError = () => {
     setError('Login dengan Google gagal. Silakan coba lagi.');
@@ -201,7 +202,7 @@ export default function Login() {
           <div className="flex-grow border-t border-gray-300"></div>
         </div>
 
-        {/* <div className="flex justify-center">
+        <div className="flex justify-center">
             <GoogleLogin
                 onSuccess={handleGoogleSuccess}
                 onError={handleGoogleError}
@@ -210,7 +211,7 @@ export default function Login() {
                 theme="outline"
                 shape="rectangular"
             />
-        </div> */}
+        </div>
 
         <div className="mt-8 text-center text-sm">
           <span className="text-gray-600">Belum punya akun? </span>
