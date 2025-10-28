@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { CalendarDays, Plus, Edit, Trash2, X } from 'lucide-react';
+
+const generateId = () => crypto.randomUUID();
 
 const SHIPS_KEY = 'masterShipsData';
 const PORTS_KEY = 'masterPortsData';
@@ -42,7 +43,7 @@ export default function MasterSchedules() {
       setSchedules(schedules.map(s => s.id === currentSchedule.id ? { id: s.id, ...scheduleData } : s));
       alert('Jadwal berhasil diperbarui!');
     } else {
-      setSchedules([...schedules, { id: uuidv4(), ...scheduleData }]);
+      setSchedules([...schedules, { id: generateId(), ...scheduleData }]);
       alert('Jadwal baru berhasil ditambahkan!');
     }
     handleCloseModal();
@@ -136,9 +137,9 @@ function ScheduleForm({ schedule, onSave, onClose, ships, ports }: ScheduleFormP
   const [arrivalTime, setArrivalTime] = useState(toInputDateTime(schedule?.arrival_time));
   const [durationMinutes, setDurationMinutes] = useState(schedule?.duration_minutes || '');
   const [status, setStatus] = useState<Schedule['status']>(schedule?.status || 'scheduled');
-  const [classes, setClasses] = useState<ClassInfo[]>(schedule?.classes || [{ id: uuidv4(), name: 'Ekonomi', price: 0, available_seats: 0 }]);
+  const [classes, setClasses] = useState<ClassInfo[]>(schedule?.classes || [{ id: generateId(), name: 'Ekonomi', price: 0, available_seats: 0 }]);
   const handleClassChange = (id: string, field: keyof Omit<ClassInfo, 'id'>, value: string | number) => { setClasses(classes.map(c => c.id === id ? { ...c, [field]: value } : c)); };
-  const addClass = () => { setClasses([...classes, { id: uuidv4(), name: '', price: 0, available_seats: 0 }]); };
+  const addClass = () => { setClasses([...classes, { id: generateId(), name: '', price: 0, available_seats: 0 }]); };
   const removeClass = (id: string) => { if (classes.length > 1) { setClasses(classes.filter(c => c.id !== id)); } else { alert("Minimal harus ada satu kelas."); } };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
