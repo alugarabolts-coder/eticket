@@ -153,48 +153,17 @@ export function Home() {
                   
                   <div className="bg-white rounded-xl shadow-md border border-gray-200">
                     <div className="flex items-center justify-between p-4">
-                      <div className="flex items-center gap-4 flex-1">
+                      <label htmlFor="departure-date" className="flex items-center gap-4 cursor-pointer flex-1">
                         <CalendarDays className="w-6 h-6 text-gray-400" />
-                        <div className="flex-1">
-                          <label htmlFor="departure-date" className="text-xs text-gray-500 block">Tanggal Berangkat</label>
-                          <input
-                            id="departure-date"
-                            ref={departureDateRef}
-                            type="date"
-                            value={formData.departureDate}
-                            onChange={(e) => setFormData({ ...formData, departureDate: e.target.value, returnDate: '' })}
-                            min={new Date().toISOString().split('T')[0]}
-                            className="w-full text-base font-semibold text-gray-800 bg-transparent focus:outline-none"
-                            required
-                          />
-                        </div>
-                      </div>
+                        <div><span className="text-xs text-gray-500 block">Tanggal Berangkat</span><p className="text-base font-semibold text-gray-800">{formatDate(formData.departureDate)}</p></div>
+                      </label>
+                      <input ref={departureDateRef} id="departure-date" type="date" value={formData.departureDate} onChange={(e) => setFormData({ ...formData, departureDate: e.target.value, returnDate: '' })} min={new Date().toISOString().split('T')[0]} className="opacity-0 w-0 h-0 absolute pr-10" required />
                       <div className="flex items-center gap-3">
                         <span className="text-sm font-medium text-gray-700">Pulang Pergi</span>
                         <label htmlFor="round-trip-toggle" className="relative inline-flex items-center cursor-pointer"><input type="checkbox" id="round-trip-toggle" className="sr-only peer" checked={isRoundTrip} onChange={() => setIsRoundTrip(!isRoundTrip)} /><div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div></label>
                       </div>
                     </div>
-                    {isRoundTrip && (
-                      <>
-                        <hr className="border-gray-200 mx-4" />
-                        <div className="flex items-center gap-4 p-4">
-                          <CalendarDays className="w-6 h-6 text-gray-400" />
-                          <div className="flex-1">
-                            <label htmlFor="return-date" className="text-xs text-gray-500 block">Tanggal Pulang</label>
-                            <input
-                              id="return-date"
-                              ref={returnDateRef}
-                              type="date"
-                              value={formData.returnDate}
-                              onChange={(e) => setFormData({ ...formData, returnDate: e.target.value })}
-                              min={formData.departureDate || new Date().toISOString().split('T')[0]}
-                              className="w-full text-base font-semibold text-gray-800 bg-transparent focus:outline-none"
-                              required={isRoundTrip}
-                            />
-                          </div>
-                        </div>
-                      </>
-                    )}
+                    {isRoundTrip && (<><hr className="border-gray-200 mx-4" /><label htmlFor="return-date" className="flex items-center gap-4 p-4 cursor-pointer"><CalendarDays className="w-6 h-6 text-gray-400" /><div><span className="text-xs text-gray-500 block">Tanggal Pulang</span><p className="text-base font-semibold text-gray-800">{formatDate(formData.returnDate)}</p></div></label><input ref={returnDateRef} id="return-date" type="date" value={formData.returnDate} onChange={(e) => setFormData({ ...formData, returnDate: e.target.value })} min={formData.departureDate || new Date().toISOString().split('T')[0]} className="opacity-0 w-0 h-0 absolute" required={isRoundTrip} /></>)}
                   </div>
                   <div className="border border-gray-200 rounded-xl p-4 shadow-md">
                     <div className="relative">
