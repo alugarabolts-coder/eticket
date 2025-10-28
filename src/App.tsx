@@ -1,5 +1,9 @@
+// src/App.tsx
+
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { BookingProvider } from './context/BookingContext';
+import { GoogleOAuthProvider } from '@react-oauth/google'; // 1. Import provider
+
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { Home } from './pages/Home';
@@ -10,37 +14,50 @@ import { Payment } from './pages/Payment';
 import { Ticket } from './pages/Ticket';
 import { MyBookings } from './pages/MyBookings';
 import { Help } from './pages/Help';
-{/* <<<<<<< HEAD */}
 import Login from './pages/Login';
-{/* ======= */}
 import { ExportData } from './pages/ExportData';
-{/* >>>>>>> baaa1fc9ee959d9886f12b167e1657e08f03c57d */}
+import Ports from './pages/master/Ports';
+import Operators from './pages/master/Operators';
+import Bookings from './pages/master/Bookings';
+import Ships from './pages/master/Ships';
+import Schedules from './pages/master/Schedules';
+
+// 2. Masukkan Client ID Anda di sini
+const GOOGLE_CLIENT_ID = "1028406807600-56m603u1uaje5jqtg4l8ifev9ra9a2fu.apps.googleusercontent.com";
 
 function App() {
   return (
-    <BrowserRouter>
-      <BookingProvider>
-        <div className="min-h-screen flex flex-col bg-gradient-to-br from-cyan-50 to-teal-50">
-          <Header />
-          <main className="flex-grow">
-            <Routes>
-              <Route path="/" element={<Navigate to="/login" replace />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/home" element={<Home />} />
-              <Route path="/search" element={<SearchResults />} />
-              <Route path="/ship-detail" element={<ShipDetail />} />
-              <Route path="/passenger-data" element={<PassengerData />} />
-              <Route path="/payment" element={<Payment />} />
-              <Route path="/ticket/:bookingCode" element={<Ticket />} />
-              <Route path="/bookings" element={<MyBookings />} />
-              <Route path="/help" element={<Help />} />
-              <Route path="/export" element={<ExportData />} />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-      </BookingProvider>
-    </BrowserRouter>
+    // 3. Bungkus BrowserRouter dengan GoogleOAuthProvider
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}> 
+      <BrowserRouter>
+        <BookingProvider>
+          <div className="min-h-screen flex flex-col bg-gradient-to-br from-cyan-50 to-teal-50">
+            <Header />
+            <main className="flex-grow">
+              <Routes>
+                <Route path="/" element={<Navigate to="/login" replace />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/home" element={<Home />} />
+                <Route path="/search" element={<SearchResults />} />
+                <Route path="/ship-detail" element={<ShipDetail />} />
+                <Route path="/passenger-data" element={<PassengerData />} />
+                <Route path="/payment" element={<Payment />} />
+                <Route path="/ticket/:bookingCode" element={<Ticket />} />
+                <Route path="/bookings" element={<MyBookings />} />
+                <Route path="/help" element={<Help />} />
+                <Route path="/export" element={<ExportData />} />
+                <Route path="/master/ports" element={<Ports />} />
+                <Route path="/master/operators" element={<Operators />} />
+                <Route path="/master/bookings" element={<Bookings />} />
+                <Route path="/master/ships" element={<Ships />} />
+                <Route path="/master/schedules" element={<Schedules />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
+        </BookingProvider>
+      </BrowserRouter>
+    </GoogleOAuthProvider>
   );
 }
 

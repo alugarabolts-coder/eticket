@@ -1,16 +1,25 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, LogIn } from 'lucide-react';
+import bgImage from '../assets/bg.jpg';
+import { GoogleLogin, CredentialResponse } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode';
 
 const dummyUsers = [
-  { id: 1, name: 'Budi Santoso', email: 'budi.santoso@email.com', password: '123' },
-  { id: 2, name: 'Siti Nurhaliza', email: 'siti.nur@email.com', password: '123' },
-  { id: 3, name: 'Ahmad Hidayat', email: 'ahmad.hidayat@email.com', password: '123' },
-  { id: 4, name: 'Kampret', email: 'dggh@ghbb', password: '123' },
-  { id: 5, name: 'jono', email: 'jono@jono', password: '123' },
-  { id: 6, name: 'Admin', email: 'admin', password: 'admin' }
+  { id: '3112b676-1700-400c-9650-842bd7f9cea5', name: 'Aryo Santoso', email: 'aryo.santoso@email.com', password: '123' },
+  { id: '2', name: 'Siti Nurhaliza', email: 'siti.nur@email.com', password: '123' },
+  { id: '3', name: 'Ahmad Hidayat', email: 'ahmad.hidayat@email.com', password: '123' },
+  { id: '4', name: 'Kampret', email: 'dggh@ghbb', password: '123' },
+  { id: '5', name: 'jono', email: 'jono@jono', password: '123' },
+  { id: '6', name: 'Admin', email: 'admin', password: 'admin' }
 ];
 
+interface GoogleUserProfile {
+  sub: string;
+  name: string;
+  email: string;
+  picture: string;
+}
 
 export default function Login() {
   const navigate = useNavigate();
@@ -39,7 +48,11 @@ export default function Login() {
 
       if (foundUser) {
         const dummyToken = `dummy-auth-token-${foundUser.id}`;
-        const userToStore = { id: foundUser.id, name: foundUser.name, email: foundUser.email };
+        const userToStore = {
+          id: foundUser.id ?? '3112b676-1700-400c-9650-842bd7f9cea5',
+          name: foundUser.name ?? foundUser.email ?? 'Guest',
+          email: foundUser.email ?? email,
+        };
 
         if (remember) {
           localStorage.setItem('auth_token', dummyToken);
@@ -60,9 +73,44 @@ export default function Login() {
     }, 1500);
   };
 
+  const handleGoogleSuccess = (credentialResponse: CredentialResponse) => {
+    if (credentialResponse.credential) {
+      const userProfile: GoogleUserProfile = jwtDecode(credentialResponse.credential);
+      console.log('Login Google berhasil:', userProfile);
+
+      const userToStore = {
+        id: userProfile.sub,
+        name: userProfile.name,
+        email: userProfile.email,
+      };
+
+      const googleAuthToken = credentialResponse.credential;
+      if (remember) {
+        localStorage.setItem('auth_token', googleAuthToken);
+        localStorage.setItem('user', JSON.stringify(userToStore));
+      } else {
+        sessionStorage.setItem('auth_token', googleAuthToken);
+        sessionStorage.setItem('user', JSON.stringify(userToStore));
+      }
+
+      navigate('/home');
+    } else {
+      handleGoogleError();
+    }
+  };
+
+  const handleGoogleError = () => {
+    setError('Login dengan Google gagal. Silakan coba lagi.');
+    console.error('Login Gagal');
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 font-sans">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-lg p-8 m-4">
+    <div
+      className="relative min-h-screen flex items-center justify-center font-sans bg-cover bg-center"
+      style={{ backgroundImage: `url(${bgImage})` }}
+    >
+      <div className="absolute inset-0 bg-gradient-to-b from-teal-600/60 to-cyan-700/80 md:from-transparent md:to-transparent"></div>
+      <div className="relative z-10 max-w-md w-full bg-white rounded-2xl shadow-lg p-8 m-4">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800">Login</h1>
         </div>
@@ -147,6 +195,23 @@ export default function Login() {
             <span>{loading ? 'Memproses...' : 'Masuk'}</span>
           </button>
         </form>
+        
+        <div className="flex items-center my-6">
+          <div className="flex-grow border-t border-gray-300"></div>
+          <span className="mx-4 text-gray-500 text-sm">atau</span>
+          <div className="flex-grow border-t border-gray-300"></div>
+        </div>
+
+        <div className="flex justify-center">
+            <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={handleGoogleError}
+                useOneTap
+                width="300px"
+                theme="outline"
+                shape="rectangular"
+            />
+        </div>
 
         <div className="mt-8 text-center text-sm">
           <span className="text-gray-600">Belum punya akun? </span>

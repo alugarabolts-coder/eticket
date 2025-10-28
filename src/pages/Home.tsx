@@ -2,23 +2,20 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, ArrowRightLeft, Users, Ship, CalendarDays, Car } from 'lucide-react';
 import { Button } from '../components/Button';
-import { supabase, Port } from '../lib/supabase';
 import { useBooking } from '../context/BookingContext';
 import bgImage from '../assets/bg.jpg';
 
-type PassengerCounterProps = {
-  value: number;
-  onIncrement: () => void;
-  onDecrement: () => void;
-  onChange: (newValue: number) => void;
-};
+const PORTS_KEY = 'masterPortsData';
 
+interface Port {
+  id: string;
+  name: string;
+  city: string;
+}
+
+type PassengerCounterProps = { value: number; onIncrement: () => void; onDecrement: () => void; onChange: (newValue: number) => void; };
 function PassengerCounter({ value, onIncrement, onDecrement, onChange }: PassengerCounterProps) {
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const numValue = parseInt(e.target.value, 10);
-    onChange(isNaN(numValue) ? 0 : numValue);
-  };
-
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => { const numValue = parseInt(e.target.value, 10); onChange(isNaN(numValue) ? 0 : numValue); };
   return (
     <div className="flex items-center border border-gray-300 rounded-md">
       <button type="button" onClick={onDecrement} className="px-3 py-1 text-lg text-gray-600 hover:bg-gray-100 rounded-l-md" aria-label="Kurangi penumpang">-</button>
@@ -40,27 +37,19 @@ export function Home() {
   const returnDateRef = useRef<HTMLInputElement>(null);
 
   const [formData, setFormData] = useState({
-    departurePort: '',
-    arrivalPort: '',
-    departureDate: '',
-    returnDate: '',
-    adults: 1,
-    lansia: 0,
-    children: 0,
-    infants: 0,
-    vehicleType: '',
+    departurePort: '', arrivalPort: '', departureDate: '', returnDate: '',
+    adults: 1, lansia: 0, children: 0, infants: 0, vehicleType: '',
   });
 
-  useEffect(() => { loadPorts(); }, []);
   useEffect(() => {
+    const savedPorts = localStorage.getItem(PORTS_KEY);
+    if (savedPorts) {
+      setPorts(JSON.parse(savedPorts));
+    }
+    
     const today = new Date().toISOString().split('T')[0];
     setFormData(f => ({ ...f, departureDate: today }));
   }, []);
-
-  const loadPorts = async () => {
-    const { data } = await supabase.from('ports').select('*').order('city');
-    if (data) setPorts(data);
-  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,7 +74,6 @@ export function Home() {
   };
 
   const totalPassengers = formData.adults + formData.lansia + formData.children + formData.infants;
-
   const formatDate = (dateString: string) => {
     if (!dateString) return "Pilih tanggal";
     const date = new Date(dateString);
@@ -93,29 +81,18 @@ export function Home() {
     const adjustedDate = new Date(date.getTime() + userTimezoneOffset);
     return adjustedDate.toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
   };
-
   const passengerTypes = [
     { id: 'adults', label: 'Dewasa', age: 'Usia 5 th keatas', min: 0 },
     { id: 'lansia', label: 'Lansia', age: 'Usia 60 th keatas', min: 0 },
     { id: 'children', label: 'Anak', age: 'Usia 2-5 th', min: 0 },
     { id: 'infants', label: 'Bayi', age: 'Dibawah 2 th', min: 0 },
   ];
-
   const vehicleTypes = [
-    { id: '', label: 'Tidak Bawa Kendaraan', description: '' },
-    { id: 'GOLI', label: 'Golongan I', description: 'Sepeda kayuh' },
-    { id: 'GOLII', label: 'Golongan II', description: 'Sepeda motor (<500 cc) & gerobak dorong' },
-    { id: 'GOLIII', label: 'Golongan III', description: 'Sepeda motor (>=500 cc) & roda 3' },
-    { id: 'GOLIVA', label: 'Golongan IVA', description: 'Kendaraan penumpang (<5 meter)' },
-    { id: 'GOLIVB', label: 'Golongan IVB', description: 'Kendaraan barang/pick up (<5 meter)' },
-    { id: 'GOLVB', label: 'Golongan VB', description: 'Kendaraan barang(mobil/truk barang/tangki) <7 meter' },
-    { id: 'GOLVIA', label: 'Golongan VIA', description: 'Kendaraan penumpang (mobil, bus besar) <10 meter' },
-    { id: 'GOLVIB', label: 'Golongan VIB', description: 'Kendaraan barang (mobil/truk barang/tangki, kereta penarik tanpa gandengan) <10 meter' },
-    { id: 'GOLVII', label: 'Golongan VII', description: 'Kendaraan (mobil barang, truk, tronton, tangki, kereta penarik dengan gandengan, kendaraan alat berat) <12 meter' },
-    { id: 'GOLVIII', label: 'Golongan VIII', description: 'Kendaraan (mobil barang, truk, tronton, tangki, kereta penarik dengan gandengan, kendaraan alat berat) <16 meter' },
-    { id: 'GOLIX', label: 'Golongan IX', description: 'Kendaraan (mobil barang, truk, tronton, tangki, kereta penarik dengan gandengan, kendaraan alat berat) >16 meter' },
+    { id: '', label: 'Tidak Bawa Kendaraan', description: '' }, { id: 'GOLI', label: 'Golongan I', description: 'Sepeda kayuh' }, { id: 'GOLII', label: 'Golongan II', description: 'Sepeda motor (<500 cc) & gerobak dorong' },
+    { id: 'GOLIII', label: 'Golongan III', description: 'Sepeda motor (>=500 cc) & roda 3' }, { id: 'GOLIVA', label: 'Golongan IVA', description: 'Kendaraan penumpang (<5 meter)' }, { id: 'GOLIVB', label: 'Golongan IVB', description: 'Kendaraan barang/pick up (<5 meter)' },
+    { id: 'GOLVB', label: 'Golongan VB', description: 'Kendaraan barang(mobil/truk barang/tangki) <7 meter' }, { id: 'GOLVIA', label: 'Golongan VIA', description: 'Kendaraan penumpang (mobil, bus besar) <10 meter' }, { id: 'GOLVIB', label: 'Golongan VIB', description: 'Kendaraan barang (mobil/truk barang/tangki, kereta penarik tanpa gandengan) <10 meter' },
+    { id: 'GOLVII', label: 'Golongan VII', description: 'Kendaraan (mobil barang, truk, tronton, tangki, kereta penarik dengan gandengan, kendaraan alat berat) <12 meter' }, { id: 'GOLVIII', label: 'Golongan VIII', description: 'Kendaraan (mobil barang, truk, tronton, tangki, kereta penarik dengan gandengan, kendaraan alat berat) <16 meter' }, { id: 'GOLIX', label: 'Golongan IX', description: 'Kendaraan (mobil barang, truk, tronton, tangki, kereta penarik dengan gandengan, kendaraan alat berat) >16 meter' },
   ];
-
   const selectedVehicle = vehicleTypes.find(v => v.id === formData.vehicleType) || vehicleTypes[0];
 
   return (
@@ -135,7 +112,6 @@ export function Home() {
             <div className="relative z-10">
               <form onSubmit={handleSearch}>
                 <div className="space-y-4 mb-6">
-                  {/* Port Selection */}
                   <div className="bg-white rounded-xl shadow-md border border-gray-200 relative">
                     <div className="flex items-center gap-4 p-4">
                       <Ship className="w-6 h-6 text-gray-400" />
@@ -160,7 +136,7 @@ export function Home() {
                     </div>
                     <button type="button" onClick={swapPorts} className="absolute top-1/2 -translate-y-1/2 right-4 bg-white border border-gray-300 text-gray-600 p-2 rounded-full hover:bg-gray-100 transition-colors transform rotate-90" aria-label="Tukar Tujuan"><ArrowRightLeft className="w-5 h-5" /></button>
                   </div>
-                  {/* Date Selection */}
+                  
                   <div className="bg-white rounded-xl shadow-md border border-gray-200">
                     <div className="flex items-center justify-between p-4">
                       <div className="flex items-center gap-4 cursor-pointer" onClick={() => departureDateRef.current?.showPicker()}>
@@ -175,98 +151,26 @@ export function Home() {
                     </div>
                     {isRoundTrip && (<><hr className="border-gray-200 mx-4" /><div className="flex items-center gap-4 p-4 cursor-pointer" onClick={() => returnDateRef.current?.showPicker()}><CalendarDays className="w-6 h-6 text-gray-400" /><div><label className="text-xs text-gray-500">Tanggal Pulang</label><p className="text-base font-semibold text-gray-800">{formatDate(formData.returnDate)}</p></div></div><input ref={returnDateRef} type="date" value={formData.returnDate} onChange={(e) => setFormData({ ...formData, returnDate: e.target.value })} min={formData.departureDate || new Date().toISOString().split('T')[0]} className="sr-only" required={isRoundTrip} /></>)}
                   </div>
-                  {/* Passenger Selection */}
                   <div className="border border-gray-200 rounded-xl p-4 shadow-md">
                     <div className="relative">
                       <label className="block text-sm font-medium text-gray-700 mb-2">Penumpang</label>
                       <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white cursor-pointer flex items-center justify-between" onClick={() => setShowPassengerOptions((prev) => !prev)}>
-                        <div className="flex items-center space-x-2">
-                          <Users className="w-5 h-5 text-gray-400" />
-                          <span>{totalPassengers} Penumpang</span>
-                        </div>
+                        <div className="flex items-center space-x-2"><Users className="w-5 h-5 text-gray-400" /><span>{totalPassengers} Penumpang</span></div>
                         <svg className={`w-4 h-4 ml-2 transition-transform ${showPassengerOptions ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                       </div>
-                      
-                      {showPassengerOptions && (
-                        <div className="absolute left-0 top-full mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-2xl p-4 z-50">
-                          <div className="space-y-4">
-                            {passengerTypes.map((type) => (
-                              <div key={type.id} className="flex items-center justify-between">
-                                <div>
-                                  <p className="font-semibold text-gray-800">{type.label}</p>
-                                  <p className="text-xs text-gray-500">{type.age}</p>
-                                </div>
-                                <PassengerCounter
-                                  value={formData[type.id as keyof typeof formData] as number}
-                                  onIncrement={() => setFormData(f => ({ ...f, [type.id]: (f[type.id as keyof typeof f] as number) + 1 }))}
-                                  onDecrement={() => setFormData(f => ({ ...f, [type.id]: Math.max(type.min, (f[type.id as keyof typeof f] as number) - 1) }))}
-                                  onChange={(newValue) => {
-                                    const updatedValue = Math.max(type.min, newValue);
-                                    setFormData(f => ({ ...f, [type.id]: updatedValue }));
-                                  }}
-                                />
-                              </div>
-                            ))}
-                          </div>
-                          <button type="button" onClick={() => setShowPassengerOptions(false)} className="w-full mt-4 bg-teal-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-teal-700 transition-colors">Selesai</button>
-                        </div>
-                      )}
+                      {showPassengerOptions && (<div className="absolute left-0 top-full mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-2xl p-4 z-50"><div className="space-y-4">{passengerTypes.map((type) => (<div key={type.id} className="flex items-center justify-between"><div><p className="font-semibold text-gray-800">{type.label}</p><p className="text-xs text-gray-500">{type.age}</p></div><PassengerCounter value={formData[type.id as keyof typeof formData] as number} onIncrement={() => setFormData(f => ({ ...f, [type.id]: (f[type.id as keyof typeof f] as number) + 1 }))} onDecrement={() => setFormData(f => ({ ...f, [type.id]: Math.max(type.min, (f[type.id as keyof typeof f] as number) - 1) }))} onChange={(newValue) => { const updatedValue = Math.max(type.min, newValue); setFormData(f => ({ ...f, [type.id]: updatedValue })); }} /></div>))}</div><button type="button" onClick={() => setShowPassengerOptions(false)} className="w-full mt-4 bg-teal-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-teal-700 transition-colors">Selesai</button></div>)}
                     </div>
                   </div>
-                  
-                  {/* Vehicle Selection Dropdown */}
                   <div className="border border-gray-200 rounded-xl p-4 shadow-md">
                     <div className="relative">
                       <label className="block text-sm font-medium text-gray-700 mb-2">Kendaraan</label>
                       <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white cursor-pointer flex items-center justify-between" onClick={() => setShowVehicleOptions((prev) => !prev)}>
-                        <div className="flex items-center space-x-2">
-                          <Car className="w-5 h-5 text-gray-400" />
-                          <div>
-                            <p className="text-sm font-semibold text-gray-800">{selectedVehicle.label}</p>
-                            <p className="text-xs text-gray-500">{selectedVehicle.description}</p>
-                          </div>
-                        </div>
+                        <div className="flex items-center space-x-2"><Car className="w-5 h-5 text-gray-400" /><div><p className="text-sm font-semibold text-gray-800">{selectedVehicle.label}</p><p className="text-xs text-gray-500">{selectedVehicle.description}</p></div></div>
                         <svg className={`w-4 h-4 ml-2 transition-transform ${showVehicleOptions ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                       </div>
-
-                      {showVehicleOptions && (
-                        <div className="absolute left-0 top-full mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-2xl p-4 z-50">
-                          {/* ===== BLOK KODE YANG DIUBAH ===== */}
-                          <div className="max-h-56 overflow-y-auto pr-2">
-                            <div className="space-y-3">
-                              {vehicleTypes.map((vehicle) => {
-                                const isSelected = formData.vehicleType === vehicle.id;
-                                return (
-                                  <div
-                                    key={vehicle.id}
-                                    onClick={() => {
-                                      setFormData({ ...formData, vehicleType: vehicle.id });
-                                      setShowVehicleOptions(false);
-                                    }}
-                                    className={`p-3 border rounded-lg cursor-pointer transition-all flex justify-between items-center ${
-                                      isSelected
-                                        ? 'border-teal-500 bg-teal-50 shadow-sm'
-                                        : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
-                                    }`}
-                                  >
-                                    <div>
-                                      <p className={`font-semibold ${isSelected ? 'text-teal-700' : 'text-gray-800'}`}>{vehicle.label}</p>
-                                      <p className="text-xs text-gray-500">{vehicle.description}</p>
-                                    </div>
-                                    <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all ${isSelected ? 'border-teal-600 bg-teal-600' : 'border-gray-400 bg-white'}`}>
-                                      {isSelected && <div className="w-2 h-2 bg-white rounded-full"></div>}
-                                    </div>
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          </div>
-                           {/* ===== AKHIR BLOK KODE YANG DIUBAH ===== */}
-                        </div>
-                      )}
+                      {showVehicleOptions && (<div className="absolute left-0 top-full mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-2xl p-4 z-50"><div className="max-h-56 overflow-y-auto pr-2"><div className="space-y-3">{vehicleTypes.map((vehicle) => { const isSelected = formData.vehicleType === vehicle.id; return (<div key={vehicle.id} onClick={() => { setFormData({ ...formData, vehicleType: vehicle.id }); setShowVehicleOptions(false); }} className={`p-3 border rounded-lg cursor-pointer transition-all flex justify-between items-center ${isSelected ? 'border-teal-500 bg-teal-50 shadow-sm' : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'}`}><div><p className={`font-semibold ${isSelected ? 'text-teal-700' : 'text-gray-800'}`}>{vehicle.label}</p><p className="text-xs text-gray-500">{vehicle.description}</p></div><div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all ${isSelected ? 'border-teal-600 bg-teal-600' : 'border-gray-400 bg-white'}`}>{isSelected && <div className="w-2 h-2 bg-white rounded-full"></div>}</div></div>); })}</div></div></div>)}
                     </div>
                   </div>
-
                 </div>
                 <Button type="submit" size="lg" className="w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-4 px-6 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
                   <Search className="w-5 h-5" />
