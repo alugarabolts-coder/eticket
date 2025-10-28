@@ -151,6 +151,7 @@ export function Home() {
                     <button type="button" onClick={swapPorts} className="absolute top-1/2 -translate-y-1/2 right-4 bg-white border border-gray-300 text-gray-600 p-2 rounded-full hover:bg-gray-100 transition-colors transform rotate-90" aria-label="Tukar Tujuan"><ArrowRightLeft className="w-5 h-5" /></button>
                   </div>
                   
+                  <div className="bg-white rounded-xl shadow-md border border-gray-200">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Tanggal Berangkat
@@ -187,6 +188,7 @@ export function Home() {
                     </div>
                   )}
 
+                  </div>
                   <div className="border border-gray-200 rounded-xl p-4 shadow-md">
                     <div className="relative">
                       <label className="block text-sm font-medium text-gray-700 mb-2">Penumpang</label>
