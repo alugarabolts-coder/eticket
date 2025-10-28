@@ -1,25 +1,21 @@
+// src/pages/Login.tsx
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, LogIn } from 'lucide-react';
 import bgImage from '../assets/bg.jpg';
-import { GoogleLogin, CredentialResponse } from '@react-oauth/google';
-import { jwtDecode } from 'jwt-decode';
 
+// Data dummy pengguna berdasarkan file bookings.csv
+// Password disamakan dengan email untuk kemudahan demo
 const dummyUsers = [
   { id: '3112b676-1700-400c-9650-842bd7f9cea5', name: 'Aryo Santoso', email: 'aryo.santoso@email.com', password: '123' },
-  { id: '2', name: 'Siti Nurhaliza', email: 'siti.nur@email.com', password: '123' },
-  { id: '3', name: 'Ahmad Hidayat', email: 'ahmad.hidayat@email.com', password: '123' },
-  { id: '4', name: 'Kampret', email: 'dggh@ghbb', password: '123' },
-  { id: '5', name: 'jono', email: 'jono@jono', password: '123' },
-  { id: '6', name: 'Admin', email: 'admin', password: 'admin' }
+  { id: 2, name: 'Siti Nurhaliza', email: 'siti.nur@email.com', password: '123' },
+  { id: 3, name: 'Ahmad Hidayat', email: 'ahmad.hidayat@email.com', password: '123' },
+  { id: 4, name: 'Kampret', email: 'dggh@ghbb', password: '123' },
+  { id: 5, name: 'jono', email: 'jono@jono', password: '123' },
+  { id: 6, name: 'Admin', email: 'admin', password: 'admin' }
 ];
 
-interface GoogleUserProfile {
-  sub: string;
-  name: string;
-  email: string;
-  picture: string;
-}
 
 export default function Login() {
   const navigate = useNavigate();
@@ -42,12 +38,14 @@ export default function Login() {
 
     setLoading(true);
     setTimeout(() => {
+      // Cari pengguna di dalam array dummyUsers
       const foundUser = dummyUsers.find(
         (user) => user.email === email && user.password === password
       );
 
       if (foundUser) {
         const dummyToken = `dummy-auth-token-${foundUser.id}`;
+        // pastikan selalu menyimpan user_id; jika tidak ada, gunakan 1
         const userToStore = {
           id: foundUser.id ?? '3112b676-1700-400c-9650-842bd7f9cea5',
           name: foundUser.name ?? foundUser.email ?? 'Guest',
@@ -63,7 +61,7 @@ export default function Login() {
         }
         
         console.log('Login berhasil!', userToStore);
-        navigate('/home');
+        navigate('/home'); // Arahkan ke halaman pesanan saya
 
       } else {
         setError('Email atau password yang Anda masukkan salah.');
@@ -71,37 +69,6 @@ export default function Login() {
 
       setLoading(false);
     }, 1500);
-  };
-
-  const handleGoogleSuccess = (credentialResponse: CredentialResponse) => {
-    if (credentialResponse.credential) {
-      const userProfile: GoogleUserProfile = jwtDecode(credentialResponse.credential);
-      console.log('Login Google berhasil:', userProfile);
-
-      const userToStore = {
-        id: userProfile.sub,
-        name: userProfile.name,
-        email: userProfile.email,
-      };
-
-      const googleAuthToken = credentialResponse.credential;
-      if (remember) {
-        localStorage.setItem('auth_token', googleAuthToken);
-        localStorage.setItem('user', JSON.stringify(userToStore));
-      } else {
-        sessionStorage.setItem('auth_token', googleAuthToken);
-        sessionStorage.setItem('user', JSON.stringify(userToStore));
-      }
-
-      navigate('/home');
-    } else {
-      handleGoogleError();
-    }
-  };
-
-  const handleGoogleError = () => {
-    setError('Login dengan Google gagal. Silakan coba lagi.');
-    console.error('Login Gagal');
   };
 
   return (
@@ -195,23 +162,6 @@ export default function Login() {
             <span>{loading ? 'Memproses...' : 'Masuk'}</span>
           </button>
         </form>
-        
-        <div className="flex items-center my-6">
-          <div className="flex-grow border-t border-gray-300"></div>
-          <span className="mx-4 text-gray-500 text-sm">atau</span>
-          <div className="flex-grow border-t border-gray-300"></div>
-        </div>
-
-        <div className="flex justify-center">
-            <GoogleLogin
-                onSuccess={handleGoogleSuccess}
-                onError={handleGoogleError}
-                useOneTap
-                width="300px"
-                theme="outline"
-                shape="rectangular"
-            />
-        </div>
 
         <div className="mt-8 text-center text-sm">
           <span className="text-gray-600">Belum punya akun? </span>
