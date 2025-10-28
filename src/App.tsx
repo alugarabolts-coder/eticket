@@ -10,14 +10,16 @@ import { Payment } from './pages/Payment';
 import { Ticket } from './pages/Ticket';
 import { MyBookings } from './pages/MyBookings';
 import { Help } from './pages/Help';
-{/* <<<<<<< HEAD */}
 import Login from './pages/Login';
-{/* ======= */}
 import { ExportData } from './pages/ExportData';
-{/* >>>>>>> baaa1fc9ee959d9886f12b167e1657e08f03c57d */}
+import Ports from './pages/master/Ports';
+import Operators from './pages/master/Operators';
+import Bookings from './pages/master/Bookings';
+import Ships from './pages/master/Ships';
+import Schedules from './pages/master/Schedules';
 
 function App() {
-  return (
+  return ( 
     <BrowserRouter>
       <BookingProvider>
         <div className="min-h-screen flex flex-col bg-gradient-to-br from-cyan-50 to-teal-50">
@@ -35,6 +37,11 @@ function App() {
               <Route path="/bookings" element={<MyBookings />} />
               <Route path="/help" element={<Help />} />
               <Route path="/export" element={<ExportData />} />
+              <Route path="/master/ports" element={<Ports />} />
+              <Route path="/master/operators" element={<Operators />} />
+              <Route path="/master/bookings" element={<Bookings />} />
+              <Route path="/master/ships" element={<Ships />} />
+              <Route path="/master/schedules" element={<Schedules />} />
             </Routes>
           </main>
           <Footer />

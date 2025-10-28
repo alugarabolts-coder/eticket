@@ -1,20 +1,16 @@
-// src/pages/Login.tsx
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, LogIn } from 'lucide-react';
+import bgImage from '../assets/bg.jpg';
 
-// Data dummy pengguna berdasarkan file bookings.csv
-// Password disamakan dengan email untuk kemudahan demo
 const dummyUsers = [
-  { id: 1, name: 'Budi Santoso', email: 'budi.santoso@email.com', password: '123' },
-  { id: 2, name: 'Siti Nurhaliza', email: 'siti.nur@email.com', password: '123' },
-  { id: 3, name: 'Ahmad Hidayat', email: 'ahmad.hidayat@email.com', password: '123' },
-  { id: 4, name: 'Kampret', email: 'dggh@ghbb', password: '123' },
-  { id: 5, name: 'jono', email: 'jono@jono', password: '123' },
-  { id: 6, name: 'Admin', email: 'admin', password: 'admin' }
+  { id: '3112b676-1700-400c-9650-842bd7f9cea5', name: 'Aryo Santoso', email: 'aryo.santoso@email.com', password: '123' },
+  { id: '2', name: 'Siti Nurhaliza', email: 'siti.nur@email.com', password: '123' },
+  { id: '3', name: 'Ahmad Hidayat', email: 'ahmad.hidayat@email.com', password: '123' },
+  { id: '4', name: 'Kampret', email: 'dggh@ghbb', password: '123' },
+  { id: '5', name: 'jono', email: 'jono@jono', password: '123' },
+  { id: '6', name: 'Admin', email: 'admin', password: 'admin' }
 ];
-
 
 export default function Login() {
   const navigate = useNavigate();
@@ -37,14 +33,17 @@ export default function Login() {
 
     setLoading(true);
     setTimeout(() => {
-      // Cari pengguna di dalam array dummyUsers
       const foundUser = dummyUsers.find(
         (user) => user.email === email && user.password === password
       );
 
       if (foundUser) {
         const dummyToken = `dummy-auth-token-${foundUser.id}`;
-        const userToStore = { id: foundUser.id, name: foundUser.name, email: foundUser.email };
+        const userToStore = {
+          id: foundUser.id ?? '3112b676-1700-400c-9650-842bd7f9cea5',
+          name: foundUser.name ?? foundUser.email ?? 'Guest',
+          email: foundUser.email ?? email,
+        };
 
         if (remember) {
           localStorage.setItem('auth_token', dummyToken);
@@ -55,7 +54,7 @@ export default function Login() {
         }
         
         console.log('Login berhasil!', userToStore);
-        navigate('/home'); // Arahkan ke halaman pesanan saya
+        navigate('/home');
 
       } else {
         setError('Email atau password yang Anda masukkan salah.');
@@ -65,9 +64,14 @@ export default function Login() {
     }, 1500);
   };
 
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 font-sans">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-lg p-8 m-4">
+    <div
+      className="relative min-h-screen flex items-center justify-center font-sans bg-cover bg-center"
+      style={{ backgroundImage: `url(${bgImage})` }}
+    >
+      <div className="absolute inset-0 bg-gradient-to-b from-teal-600/60 to-cyan-700/80 md:from-transparent md:to-transparent"></div>
+      <div className="relative z-10 max-w-md w-full bg-white rounded-2xl shadow-lg p-8 m-4">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800">Login</h1>
         </div>
@@ -152,7 +156,7 @@ export default function Login() {
             <span>{loading ? 'Memproses...' : 'Masuk'}</span>
           </button>
         </form>
-
+        
         <div className="mt-8 text-center text-sm">
           <span className="text-gray-600">Belum punya akun? </span>
           <Link to="/register" className="text-teal-600 hover:underline font-medium">
